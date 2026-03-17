@@ -1,8 +1,10 @@
 ﻿using FamilyApplication.DTOs;
+using FamilyApplication.Models;
 using FamilyApplication.Services;
 using FamilyApplication.utils;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 
 namespace FamilyApplication.Controllers
 {
@@ -24,7 +26,16 @@ namespace FamilyApplication.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<MemberDto>>> GetMembers()
         {
+            if (!ModelState.IsValid)
+            {
+                throw new Exception("Dados inválidos.");
+            }
+
             var members = await _memberService.GetAllMembersAsync();
+
+            if (members.IsNullOrEmpty())
+                return Ok("Não há nenhum membro familiar registrado.");
+
             return Ok(members);
         }
 
@@ -32,6 +43,11 @@ namespace FamilyApplication.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<MemberDto>> GetMemberById(long id)
         {
+            if (!ModelState.IsValid)
+            {
+                throw new Exception("Dados inválidos.");
+            }
+
             var member = await _memberService.GetMemberByIdAsync(id);
 
             if (member == null)
@@ -46,7 +62,16 @@ namespace FamilyApplication.Controllers
         [HttpGet("category/{category}")]
         public async Task<ActionResult<IEnumerable<MemberDto>>> GetMembersByCategory(string category)
         {
+            if (!ModelState.IsValid)
+            {
+                throw new Exception("Dados inválidos.");
+            }
+
             var members = await _memberService.GetMembersByCategoryAsync(category);
+
+            if (members.IsNullOrEmpty())
+                return Ok("Não há nenhum membro familiar registrado.");
+
             return Ok(members);
         }
 
@@ -56,6 +81,11 @@ namespace FamilyApplication.Controllers
         {
             try
             {
+                if (!ModelState.IsValid)
+                {
+                    throw new Exception("Dados inválidos.");
+                }
+
                 var Validation = MemberValidation.IsValidMember(createDto);
 
 
@@ -80,6 +110,11 @@ namespace FamilyApplication.Controllers
         {
             try
             {
+                if (!ModelState.IsValid)
+                {
+                    throw new Exception("Dados inválidos.");
+                }
+
                 if (await _memberService.GetMemberByIdAsync(id) == null)
                     return BadRequest("Membro selecionado não existe!");
 
@@ -107,6 +142,11 @@ namespace FamilyApplication.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteMember(long id)
         {
+            if (!ModelState.IsValid)
+            {
+                throw new Exception("Dados inválidos.");
+            }
+
             var result = await _memberService.DeleteMemberAsync(id);
 
             if (!result)

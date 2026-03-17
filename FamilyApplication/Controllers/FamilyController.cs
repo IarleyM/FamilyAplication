@@ -1,7 +1,9 @@
 ﻿using FamilyApplication.DTOs;
+using FamilyApplication.Models;
 using FamilyApplication.Services;
 using FamilyGroupApplication.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 
 namespace FamilyApplication.Controllers
 {
@@ -23,7 +25,17 @@ namespace FamilyApplication.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<FamilyDto>>> GetFamily()
         {
+            if (!ModelState.IsValid)
+            {
+                throw new Exception("Dados inválidos.");
+            }
+
+
             var Family = await _Familyervice.GetAllFamilysAsync();
+
+            if (Family.IsNullOrEmpty())
+                return Ok("Não há nenhuma família registrado.");
+
             return Ok(Family);
         }
 
@@ -31,6 +43,11 @@ namespace FamilyApplication.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<FamilyDto>> GetFamily(long id)
         {
+            if (!ModelState.IsValid)
+            {
+                throw new Exception("Dados inválidos.");
+            }
+
             var Family = await _Familyervice.GetFamilyByIdAsync(id);
 
             if (Family == null)
@@ -48,6 +65,11 @@ namespace FamilyApplication.Controllers
         {
             try
             {
+                if (!ModelState.IsValid)
+                {
+                    throw new Exception("Dados inválidos.");
+                }
+
                 var FamilyGroupExists = await _FamilyGroupservice.GetFamilyGroupByIdAsync(createDto.FamilyGroupId);
 
                 if (FamilyGroupExists == null)
@@ -76,6 +98,11 @@ namespace FamilyApplication.Controllers
         {
             try
             {
+                if (!ModelState.IsValid)
+                {
+                    throw new Exception("Dados inválidos.");
+                }
+
                 var updated = await _Familyervice.UpdateFamilyAsync(id, updateDto);
 
                 if (updated == null)
@@ -95,6 +122,11 @@ namespace FamilyApplication.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteFamily(long id)
         {
+            if (!ModelState.IsValid)
+            {
+                throw new Exception("Dados inválidos.");
+            }
+
             var result = await _Familyervice.DeleteFamilyAsync(id);
 
             if (!result)
