@@ -26,12 +26,12 @@ namespace FamilyGroupApplication.Services
             return FamilyGroup != null ? MapToDto(FamilyGroup) : null;
         }
 
-        public async Task<FamilyGroupDto> CreateFamilyGroupAsync(CreateFamilyGroupDto createDto)
+        public async Task<FamilyGroupDto> CreateFamilyGroupAsync(CreateFamilyGroupDto createDto, string fileName)
         {
             var FamilyGroup = new FamilyGroup
             {
                 FamilyGroupName = createDto.FamilyGroupName,
-                Photo = createDto.Photo
+                Photo = fileName
             };
 
             var created = await _repository.CreateAsync(FamilyGroup);
@@ -46,7 +46,7 @@ namespace FamilyGroupApplication.Services
 
             existingFamilyGroup.FamilyGroupName = updateDto.FamilyGroupName ?? existingFamilyGroup.FamilyGroupName;
             existingFamilyGroup.QuantityMember = (updateDto.QuantityMember ?? existingFamilyGroup.QuantityMember);
-            existingFamilyGroup.Photo = updateDto.Photo ?? existingFamilyGroup.Photo;
+            existingFamilyGroup.Photo = updateDto.Photo.ToString() ?? existingFamilyGroup.Photo;
 
             var updated = await _repository.UpdateAsync(existingFamilyGroup);
             return MapToDto(updated);

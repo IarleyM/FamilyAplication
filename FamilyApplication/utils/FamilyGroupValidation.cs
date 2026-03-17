@@ -11,7 +11,7 @@ namespace FamilyApplication.utils
             if (familyGroupDto.FamilyGroupName.IsNullOrEmpty())
                 return new ValidationMessages(false, "Informe seu nome!");
 
-            if (familyGroupDto.Photo.IsNullOrEmpty())
+            if ((familyGroupDto.Photo.ToString()).IsNullOrEmpty())
                 return new ValidationMessages(false, "Informe uma foto!");
 
             return new ValidationMessages(true, "Família Adicionada com Sucesso!");

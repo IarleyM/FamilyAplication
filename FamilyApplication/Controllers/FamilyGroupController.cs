@@ -56,7 +56,7 @@ namespace FamilyGroupApplication.Controllers
 
         // POST: api/FamilyGroup
         [HttpPost]
-        public async Task<ActionResult<FamilyGroupDto>> CreateFamilyGroup(CreateFamilyGroupDto createDto)
+        public async Task<ActionResult<FamilyGroupDto>> CreateFamilyGroup([FromForm] CreateFamilyGroupDto createDto)
         {
             try
             {
@@ -65,12 +65,25 @@ namespace FamilyGroupApplication.Controllers
                     throw new Exception("Dados inválidos.");
                 }
 
+                var folderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images");
+
+                if (!Directory.Exists(folderPath))
+                {
+                    Directory.CreateDirectory(folderPath);
+                }
+
+                var fileName = Guid.NewGuid() + Path.GetExtension(createDto.Photo.FileName);
+                var filePath = Path.Combine(folderPath, fileName);
+
+                using Stream fileStream = new FileStream(filePath, FileMode.Create);
+                createDto.Photo.CopyTo(fileStream);
+
                 var Validation = FamilyGroupValidation.IsValidFamilyGroup(createDto);
 
                 if (!Validation.IsValidMember)
                     return BadRequest(Validation.Message);
 
-                var FamilyGroup = await _FamilyGroupervice.CreateFamilyGroupAsync(createDto);
+                var FamilyGroup = await _FamilyGroupervice.CreateFamilyGroupAsync(createDto, filePath);
                 return CreatedAtAction(nameof(GetFamilyGroup), new { id = FamilyGroup.FamilyGroupId }, FamilyGroup);
             }
             catch (Exception ex)

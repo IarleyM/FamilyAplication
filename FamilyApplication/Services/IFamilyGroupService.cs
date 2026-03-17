@@ -6,7 +6,7 @@ namespace FamilyGroupApplication.Services
     {
         Task<IEnumerable<FamilyGroupDto>> GetAllFamilyGroupsAsync();
         Task<FamilyGroupDto> GetFamilyGroupByIdAsync(long id);
-        Task<FamilyGroupDto> CreateFamilyGroupAsync(CreateFamilyGroupDto FamilyGroup);
+        Task<FamilyGroupDto> CreateFamilyGroupAsync(CreateFamilyGroupDto FamilyGroup, string FileName);
         Task<FamilyGroupDto> UpdateFamilyGroupAsync(long id, UpdateFamilyGroupDto FamilyGroup);
         Task<bool> DeleteFamilyGroupAsync(long id);
     }
