@@ -56,7 +56,7 @@ namespace FamilyApplication.Data
                     .HasMaxLength(100);
 
                 entity.Property(e => e.CreationDate)
-                    .HasColumnType("timestamp with time zone");
+                    .HasColumnType("timestamp without time zone");
 
                 // Se FamilyGroup.DeletionDate for DateTime? (nullable)
                 entity.Property(e => e.DeletionDate)

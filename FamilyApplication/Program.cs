@@ -3,6 +3,7 @@ using FamilyApplication.Repositories;
 using FamilyApplication.Services;
 using FamilyGroupApplication.Repositories;
 using FamilyGroupApplication.Services;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -23,6 +24,11 @@ builder.Services.AddScoped<IFamilyGroupRepository, FamilyGroupRepository>();
 builder.Services.AddScoped<IFamilyGroupService, FamilyGroupService>();
 builder.Services.AddScoped<IFamilyService, FamilyService>();
 builder.Services.AddScoped<IFamilyRepository, FamilyRepository>();
+
+builder.Services.Configure<ApiBehaviorOptions>(options =>
+{
+    options.SuppressModelStateInvalidFilter = true;
+});
 
 // Configurar CORS
 builder.Services.AddCors(options =>

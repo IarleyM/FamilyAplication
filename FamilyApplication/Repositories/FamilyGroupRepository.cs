@@ -52,7 +52,6 @@ namespace FamilyGroupApplication.Repositories
             if (FamilyGroup == null)
                 return false;
 
-            // Soft delete
             FamilyGroup.DeletionDate = DateTime.Now;
             await _context.SaveChangesAsync();
 

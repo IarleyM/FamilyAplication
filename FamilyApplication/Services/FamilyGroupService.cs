@@ -64,7 +64,9 @@ namespace FamilyGroupApplication.Services
                 FamilyGroupId = FamilyGroup.FamilyGroupId,
                 FamilyGroupName = FamilyGroup.FamilyGroupName,
                 QuantityMember = FamilyGroup.QuantityMember,
-                Photo = FamilyGroup.Photo
+                CreationDate = FamilyGroup.CreationDate,
+                Photo = FamilyGroup.Photo,
+                Families = FamilyGroup.Families
             };
         }
     }
