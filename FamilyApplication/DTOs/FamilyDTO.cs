@@ -23,7 +23,7 @@ namespace FamilyApplication.DTOs
     public class UpdateFamilyDto
     {
         public string FamilyName { get; set; }
-        public int QuantityMember { get; set; }
+        public int? QuantityMember { get; set; }
         public string Photo { get; set; }
     }
 }

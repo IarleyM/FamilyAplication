@@ -46,9 +46,9 @@ namespace FamilyApplication.Services
             if (existingFamily == null)
                 return null;
 
-            existingFamily.FamilyName = updateDto.FamilyName;
-            existingFamily.QuantityMember = updateDto.QuantityMember;
-            existingFamily.Photo = updateDto.Photo;
+            existingFamily.FamilyName = updateDto.FamilyName ?? existingFamily.FamilyName;
+            existingFamily.QuantityMember = updateDto.QuantityMember ?? existingFamily.QuantityMember;
+            existingFamily.Photo = updateDto.Photo ?? existingFamily.Photo;
 
             var updated = await _repository.UpdateAsync(existingFamily);
             return MapToDto(updated);
