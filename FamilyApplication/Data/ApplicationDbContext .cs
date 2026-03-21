@@ -1,6 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
-using FamilyApplication.Models;
+﻿using FamilyApplication.DTOs;
 using FamilyApplication.Enums;
+using FamilyApplication.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace FamilyApplication.Data
 {
@@ -14,6 +15,8 @@ namespace FamilyApplication.Data
         public DbSet<Member> Members { get; set; }
         public DbSet<Family> Family { get; set; }
         public DbSet<FamilyGroup> FamilyGroup { get; set; }
+
+        public DbSet<Post> Post { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -62,6 +65,31 @@ namespace FamilyApplication.Data
                 entity.Property(e => e.DeletionDate)
                     .HasColumnType("timestamp without time zone");
             });
+
+            modelBuilder.Entity<Post>(entity =>
+            {
+                entity.ToTable("Posts");
+                entity.HasKey(e => e.PostId);
+
+                entity.Property(e => e.CreationDate)
+                    .HasColumnType("timestamp without time zone");
+
+                // Se FamilyGroup.DeletionDate for DateTime? (nullable)
+                entity.Property(e => e.DeletionDate)
+                    .HasColumnType("timestamp without time zone");
+            });
+
+            modelBuilder.Entity<PostFile>(entity =>
+            {
+                entity.ToTable("PostFiles");
+                entity.HasKey(e => e.PostId);
+            });
+
+            modelBuilder.Entity<PostFile>()
+            .HasOne(pf => pf.Post)
+            .WithMany(p => p.Files)
+            .HasForeignKey(pf => pf.PostId)
+            .OnDelete(DeleteBehavior.Cascade);
 
             // Configurar Family (se tiver DeletionDate como nullable)
             modelBuilder.Entity<Family>(entity =>

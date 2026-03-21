@@ -26,10 +26,6 @@ namespace FamilyApplication.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<MemberDto>>> GetMembers()
         {
-            if (!ModelState.IsValid)
-            {
-                throw new Exception("Dados inválidos.");
-            }
 
             var members = await _memberService.GetAllMembersAsync();
 
