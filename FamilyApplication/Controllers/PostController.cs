@@ -40,7 +40,7 @@ namespace FamilyApplication.Controllers
             if (!Directory.Exists(folderPath))
                 Directory.CreateDirectory(folderPath);
 
-            var filesToSave = new List<PostFile>();
+            var filesToSave = new List<PostFileDTO>();
 
             foreach (var file in createPostDTO.Files)
             {
@@ -55,7 +55,7 @@ namespace FamilyApplication.Controllers
                     await file.CopyToAsync(stream);
                 }
 
-                filesToSave.Add(new PostFile
+                filesToSave.Add(new PostFileDTO
                 {
                     PostFileId = Guid.NewGuid(),
                     FileName = fileName,
@@ -64,12 +64,11 @@ namespace FamilyApplication.Controllers
                 });
             }
 
-            var post = new Post
+            var post = new PostDTO
             {
                 Title = createPostDTO.Title,
                 Description = createPostDTO.Description,
                 MemberId = createPostDTO.MemberId,
-                CreationDate = DateTime.Now,
                 Files = filesToSave
             };
 
@@ -79,13 +78,13 @@ namespace FamilyApplication.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Post>>> GetAllPostsAsync()
+        public async Task<ActionResult<IEnumerable<PostDTO>>> GetAllPostsAsync()
         {
             var posts = await _postService.GetAllPostAsync();
 
             foreach (var post in posts)
             {
-                
+                post.Files = (List<PostFileDTO>) await _postService.GetPostFileByPostId(post.PostId);
             }
 
             return Ok(posts);

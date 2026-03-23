@@ -13,39 +13,60 @@ namespace FamilyApplication.Services
             _repository = repository;
         }
 
-        public async Task<Post> AddNewPostAsync(Post post)
+        public async Task<PostDTO> AddNewPostAsync(PostDTO postdto)
         {
+            Post post = new Post
+            {
+                Title = postdto.Title,
+                Description = postdto.Description,
+                MemberId = postdto.MemberId,
+                CreationDate = DateTime.Now,
+                Files = postdto.Files?.Select(f => new PostFile
+                {
+                    PostFileId = f.PostFileId,
+                    FileName = f.FileName,
+                    FilePath = f.FilePath,
+                    ContentType = f.ContentType
+                }).ToList()
+            };
+
             var created = await _repository.AddNewPostAsync(post);
-            return created;
+            return MapToPostDto(created);
         }
 
-        public Task<Post> DeletePostAsync(long id)
+        public Task<PostDTO> DeletePostAsync(long id)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<IEnumerable<Post>> GetAllPostAsync()
+        public async Task<IEnumerable<PostDTO>> GetAllPostAsync()
         {
             var posts = await _repository.GetAllPostAsync();
-            return posts;
+            return posts.Select(m => MapToPostDto(m));
         }
 
-        public Task<IEnumerable<Post>> GetByFamilyGroupIdAsync(long id)
+        public Task<IEnumerable<PostDTO>> GetByFamilyGroupIdAsync(long id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<Post>> GetByFamilyIdAsync(long id)
+        public Task<IEnumerable<PostDTO>> GetByFamilyIdAsync(long id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<Post>> GetByMemberIdAsync(long id)
+        public Task<IEnumerable<PostDTO>> GetByMemberIdAsync(long id)
         {
             throw new NotImplementedException();
         }
 
-        private PostDTO MapToDto(Post post)
+        public async Task<IEnumerable<PostFileDTO>> GetPostFileByPostId(long id)
+        {
+            var posts = await _repository.GetPostFileByPostId(id);
+            return MapToPostFileDto(posts);
+        }
+
+        private PostDTO MapToPostDto(Post post)
         {
             return new PostDTO
             {
@@ -59,8 +80,24 @@ namespace FamilyApplication.Services
                     FileName = f.FileName,
                     FilePath = f.FilePath,
                     PostId = f.PostId,
+                    ContentType = f.ContentType
                 }).ToList()
             };
+        }
+
+        private List<PostFileDTO> MapToPostFileDto(IEnumerable<PostFile> post)
+        {
+            if (post == null)
+                return new List<PostFileDTO>();
+
+            return post.Select(postFile => new PostFileDTO
+            {
+                PostFileId = postFile.PostFileId,
+                FileName = postFile.FileName,
+                FilePath = postFile.FilePath,
+                PostId = postFile.PostId,
+                ContentType = postFile.ContentType
+            }).ToList();
         }
     }
 }

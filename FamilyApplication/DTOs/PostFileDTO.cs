@@ -9,7 +9,7 @@ namespace FamilyApplication.DTOs
         public string FileName { get; set; }
         public string FilePath { get; set; }
         public long PostId { get; set; }
-        public string contentType { get; set; }
+        public string ContentType { get; set; }
     }
     public class CreateFilePostDTO
     {

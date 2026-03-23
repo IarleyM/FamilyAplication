@@ -49,5 +49,12 @@ namespace FamilyApplication.Repositories
         {
             throw new NotImplementedException();
         }
+
+        public async Task<IEnumerable<PostFile>> GetPostFileByPostId(long id)
+        {
+            return await _context.PostFile
+                .Where(pf => pf.PostId == id)
+                 .ToListAsync();
+        }
     }
 }

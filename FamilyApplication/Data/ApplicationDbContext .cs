@@ -15,8 +15,8 @@ namespace FamilyApplication.Data
         public DbSet<Member> Members { get; set; }
         public DbSet<Family> Family { get; set; }
         public DbSet<FamilyGroup> FamilyGroup { get; set; }
-
         public DbSet<Post> Post { get; set; }
+        public DbSet<PostFile> PostFile { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -82,7 +82,10 @@ namespace FamilyApplication.Data
             modelBuilder.Entity<PostFile>(entity =>
             {
                 entity.ToTable("PostFiles");
-                entity.HasKey(e => e.PostId);
+                entity.HasKey(e => e.PostFileId);
+
+                entity.Property(e => e.PostFileId)
+                      .ValueGeneratedOnAdd();
             });
 
             modelBuilder.Entity<PostFile>()
