@@ -49,7 +49,7 @@ namespace FamilyApplication.Repositories
         public async Task<bool> DeleteAsync(long id)
         {
             var family = await _context.Family.FindAsync(id);
-            if (family == null)
+            if (family == null || family.DeletionDate.HasValue)
                 return false;
 
             // Soft delete

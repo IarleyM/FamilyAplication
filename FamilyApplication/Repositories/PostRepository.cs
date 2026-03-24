@@ -32,6 +32,7 @@ namespace FamilyApplication.Repositories
         public async Task<IEnumerable<Post>> GetAllPostAsync()
         {
             return await _context.Post
+                 .Where(m => m.DeletionDate == null)
                  .ToListAsync();
         }
 

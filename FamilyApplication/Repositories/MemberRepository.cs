@@ -17,7 +17,7 @@ namespace FamilyApplication.Repositories
         public async Task<IEnumerable<Member>> GetAllAsync()
         {
             return await _context.Members
-                .Where(m => m.DeletionDate == null) // Não deletados
+                .Where(m => m.DeletionDate == null)
                 .ToListAsync();
         }
 
@@ -48,7 +48,7 @@ namespace FamilyApplication.Repositories
         public async Task<bool> DeleteAsync(long id)
         {
             var member = await _context.Members.FindAsync(id);
-            if (member == null)
+            if (member == null || member.DeletionDate.HasValue)
                 return false;
 
             // Soft delete

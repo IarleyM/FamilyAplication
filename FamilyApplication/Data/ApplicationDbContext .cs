@@ -17,6 +17,7 @@ namespace FamilyApplication.Data
         public DbSet<FamilyGroup> FamilyGroup { get; set; }
         public DbSet<Post> Post { get; set; }
         public DbSet<PostFile> PostFile { get; set; }
+        public DbSet<User> User { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -106,6 +107,23 @@ namespace FamilyApplication.Data
                 // Se Family.DeletionDate for DateTime? (nullable)
                 entity.Property(e => e.DeletionDate)
                     .HasColumnType("timestamp with time zone");
+            });
+
+            modelBuilder.Entity<User>(entity =>
+            {
+                entity.ToTable("User");
+                entity.HasKey(e => e.UserId);
+
+                entity.Property(e => e.UserName)
+                    .IsRequired()
+                    .HasMaxLength(100);
+
+                entity.Property(e => e.CreationDate)
+                    .HasColumnType("timestamp without time zone");
+
+                // Se FamilyGroup.DeletionDate for DateTime? (nullable)
+                entity.Property(e => e.DeletionDate)
+                    .HasColumnType("timestamp without time zone");
             });
         }
     }

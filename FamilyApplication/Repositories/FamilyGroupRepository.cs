@@ -49,7 +49,7 @@ namespace FamilyGroupApplication.Repositories
         public async Task<bool> DeleteAsync(long id)
         {
             var FamilyGroup = await _context.FamilyGroup.FindAsync(id);
-            if (FamilyGroup == null)
+            if (FamilyGroup == null || FamilyGroup.DeletionDate.HasValue)
                 return false;
 
             FamilyGroup.DeletionDate = DateTime.Now;
