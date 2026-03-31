@@ -21,11 +21,6 @@ namespace FamilyGroupApplication.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<FamilyGroupDto>>> GetFamilyGroup()
         {
-            if (!ModelState.IsValid)
-            {
-                throw new Exception("Dados inválidos.");
-            }
-
             var FamilyGroup = await _FamilyGroupervice.GetAllFamilyGroupsAsync();
 
             if (FamilyGroup.IsNullOrEmpty())
