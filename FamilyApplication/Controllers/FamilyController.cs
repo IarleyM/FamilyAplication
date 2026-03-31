@@ -61,8 +61,9 @@ namespace FamilyApplication.Controllers
 
         // POST: api/Family
         [HttpPost]
-        public async Task<ActionResult<FamilyDto>> CreateFamily(CreateFamilyDto createDto)
+        public async Task<ActionResult<FamilyDto>> CreateFamily([FromForm] CreateFamilyDto createDto)
         {
+            string filePath = null;
             try
             {
                 if (!ModelState.IsValid)
@@ -81,13 +82,34 @@ namespace FamilyApplication.Controllers
                     QuantityMember = FamilyGroupExists.QuantityMember + 1
                 };
 
+                #region Photo
+                var folderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "profile_family");
+
+                if (!Directory.Exists(folderPath))
+                {
+                    Directory.CreateDirectory(folderPath);
+                }
+
+                var fileName = Guid.NewGuid() + Path.GetExtension(createDto.Photo.FileName);
+                filePath = Path.Combine(folderPath, fileName);
+
+                using Stream fileStream = new FileStream(filePath, FileMode.Create);
+                createDto.Photo.CopyTo(fileStream);
+
+                #endregion
+
+
                 FamilyGroupExists = await _FamilyGroupservice.UpdateFamilyGroupAsync(FamilyGroupExists.FamilyGroupId, updateDto);
 
-                var Family = await _Familyervice.CreateFamilyAsync(createDto);
+                var Family = await _Familyervice.CreateFamilyAsync(createDto, filePath);
                 return CreatedAtAction(nameof(GetFamily), new { id = Family.FamilyId }, Family);
             }
             catch (Exception ex)
             {
+                if (!string.IsNullOrEmpty(filePath) && System.IO.File.Exists(filePath))
+                {
+                    System.IO.File.Delete(filePath);
+                }
                 return BadRequest($"Erro ao criar membro: {ex.Message}");
             }
         }

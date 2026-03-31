@@ -8,7 +8,7 @@ namespace FamilyApplication.Services
     {
         Task<IEnumerable<FamilyDto>> GetAllFamilysAsync();
         Task<FamilyDto> GetFamilyByIdAsync(long id);
-        Task<FamilyDto> CreateFamilyAsync(CreateFamilyDto Family);
+        Task<FamilyDto> CreateFamilyAsync(CreateFamilyDto Family, string filepath);
         Task<FamilyDto> UpdateFamilyAsync(long id, UpdateFamilyDto Family);
         Task<bool> DeleteFamilyAsync(long id);
     }

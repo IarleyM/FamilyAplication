@@ -12,18 +12,24 @@ namespace FamilyApplication.DTOs
         public DateTime BirthDate { get; set; }
         public string Photo { get; set; }
         public long FamilyId { get; set; }
+
+        public long UserId { get; set; }
     }
 
     public class CreateMemberDto
     {
+        [Required]
         public string MemberName { get; set; }
         public int Age { get; set; }
+        [Required]
         public FamilyCategory FamilyCategory { get; set; }
         public DateTime BirthDate { get; set; }
         public string Photo { get; set; }
 
         [Required]
         public long FamilyId { get; set; }
+        [Required]
+        public long UserId { get; set; }
     }
 
     public class UpdateMemberDto

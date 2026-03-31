@@ -23,6 +23,8 @@ namespace FamilyApplication.Models
         [Required]
         public long FamilyId { get; set; }
 
+        public long UserId { get; set; }
+
         public Member() { }
     }
 }

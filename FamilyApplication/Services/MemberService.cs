@@ -82,7 +82,8 @@ namespace FamilyApplication.Services
                 Age = member.Age,
                 FamilyCategory = member.familyCategory.ToString(),
                 BirthDate = member.BirthDate,
-                Photo = member.Photo
+                Photo = member.Photo,
+                UserId = member.UserId,
             };
         }
     }

@@ -53,12 +53,16 @@ namespace FamilyGroupApplication.Controllers
         [HttpPost]
         public async Task<ActionResult<FamilyGroupDto>> CreateFamilyGroup([FromForm] CreateFamilyGroupDto createDto)
         {
+            string filePath = null;
+
             try
             {
                 if (!ModelState.IsValid)
                 {
                     throw new Exception("Dados inválidos.");
                 }
+
+                #region Photo
 
                 var folderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images");
 
@@ -68,10 +72,12 @@ namespace FamilyGroupApplication.Controllers
                 }
 
                 var fileName = Guid.NewGuid() + Path.GetExtension(createDto.Photo.FileName);
-                var filePath = Path.Combine(folderPath, fileName);
+                filePath = Path.Combine(folderPath, fileName);
 
                 using Stream fileStream = new FileStream(filePath, FileMode.Create);
                 createDto.Photo.CopyTo(fileStream);
+
+                #endregion
 
                 var Validation = FamilyGroupValidation.IsValidFamilyGroup(createDto);
 
@@ -83,6 +89,11 @@ namespace FamilyGroupApplication.Controllers
             }
             catch (Exception ex)
             {
+                if (!string.IsNullOrEmpty(filePath) && System.IO.File.Exists(filePath))
+                {
+                    System.IO.File.Delete(filePath);
+                }
+
                 return BadRequest($"Erro ao criar membro: {ex.Message}");
             }
         }

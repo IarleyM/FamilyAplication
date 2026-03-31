@@ -46,7 +46,7 @@ namespace FamilyGroupApplication.Services
 
             existingFamilyGroup.FamilyGroupName = updateDto.FamilyGroupName ?? existingFamilyGroup.FamilyGroupName;
             existingFamilyGroup.QuantityMember = (updateDto.QuantityMember ?? existingFamilyGroup.QuantityMember);
-            existingFamilyGroup.Photo = updateDto.Photo.ToString() ?? existingFamilyGroup.Photo;
+            existingFamilyGroup.Photo = updateDto.Photo ?? existingFamilyGroup.Photo;
 
             var updated = await _repository.UpdateAsync(existingFamilyGroup);
             return MapToDto(updated);

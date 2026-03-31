@@ -27,12 +27,12 @@ namespace FamilyApplication.Services
             return Family != null ? MapToDto(Family) : null;
         }
 
-        public async Task<FamilyDto> CreateFamilyAsync(CreateFamilyDto createDto)
+        public async Task<FamilyDto> CreateFamilyAsync(CreateFamilyDto createDto, string filepath)
         {
             var Family = new Family
             {
                 FamilyName = createDto.FamilyName,
-                Photo = createDto.Photo,
+                Photo = filepath,
                 FamilyGroupId = createDto.FamilyGroupId
             };
 

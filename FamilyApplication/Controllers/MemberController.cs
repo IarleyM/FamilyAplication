@@ -16,10 +16,13 @@ namespace FamilyApplication.Controllers
 
         private readonly IFamilyService _familyService;
 
-        public MembersController(IMemberService memberService, IFamilyService familyService)
+        private readonly IUserService _userService;
+
+        public MembersController(IMemberService memberService, IFamilyService familyService, IUserService userService)
         {
             _memberService = memberService;
             _familyService = familyService;
+            _userService = userService;
         }
 
         // GET: api/members
@@ -84,8 +87,11 @@ namespace FamilyApplication.Controllers
 
                 var Validation = MemberValidation.IsValidMember(createDto);
 
+                if(await _userService.GetUserByIdAsync(createDto.UserId) == null)
+                    return BadRequest("Usuário selecionado não existe!");
 
-                 if (await _familyService.GetFamilyByIdAsync(createDto.FamilyId) == null)
+
+                if (await _familyService.GetFamilyByIdAsync(createDto.FamilyId) == null)
                     return BadRequest("Familia selecionada não existe!");
 
                 if (!Validation.IsValidMember)

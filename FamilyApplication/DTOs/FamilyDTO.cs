@@ -16,7 +16,7 @@ namespace FamilyApplication.DTOs
     public class CreateFamilyDto
     {
         public string FamilyName { get; set; }
-        public string Photo { get; set; }
+        public IFormFile Photo { get; set; }
         public long FamilyGroupId { get; set; }
     }
 
